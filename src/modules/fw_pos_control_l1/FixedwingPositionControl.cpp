@@ -917,10 +917,13 @@ FixedwingPositionControl::control_auto(const hrt_abstime &now, const Vector2d &c
 		_att_sp.roll_body = _npfg.getRollSetpoint();
 
 	} else {
-		Vector2f curr_wp(path_sp.x, path_sp.y);
-		Vector2f prev_wp{path_sp.prev_wp};
-		_l1_control.navigate_waypoints(prev_wp, curr_wp, curr_pos_local, get_nav_speed_2d(ground_speed));
-		_att_sp.roll_body = _l1_control.get_roll_setpoint();
+		if (position_sp_type != position_setpoint_s::SETPOINT_TYPE_LOITER
+		    || position_sp_type != position_setpoint_s::SETPOINT_TYPE_TAKEOFF) {
+			Vector2f curr_wp(path_sp.x, path_sp.y);
+			Vector2f prev_wp{path_sp.prev_wp};
+			_l1_control.navigate_waypoints(prev_wp, curr_wp, curr_pos_local, get_nav_speed_2d(ground_speed));
+			_att_sp.roll_body = _l1_control.get_roll_setpoint();
+		}
 	}
 
 	/* reset landing state */
