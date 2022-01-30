@@ -1,0 +1,5 @@
+menuconfig EXAMPLES_PARAMCHANGE
+	bool "paramchange"
+	default n
+	---help---
+		Enable support for paramchange

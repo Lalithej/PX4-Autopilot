@@ -320,6 +320,12 @@ int Commander::custom_command(int argc, char *argv[])
 	if (!strcmp(argv[0], "takeoff")) {
 		// switch to takeoff mode and arm
 		send_vehicle_command(vehicle_command_s::VEHICLE_CMD_NAV_TAKEOFF);
+		char *end;
+		PX4_INFO("Setting EKF2_IMU_POS_X....");
+		float newval = strtod("0.1", &end);
+		param_t param_mpc_pos_mode = param_find("EKF2_IMU_POS_X");
+		param_set(param_mpc_pos_mode, &newval);	
+		PX4_INFO("EKF2_IMU_POS_X has been set to %.2f meters ", (double)newval);
 		send_vehicle_command(vehicle_command_s::VEHICLE_CMD_COMPONENT_ARM_DISARM,
 				     static_cast<float>(vehicle_command_s::ARMING_ACTION_ARM),
 				     0.f);
